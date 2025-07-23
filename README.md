@@ -48,7 +48,7 @@ This user-friendly tool enables program coordinators and researchers to:
 - Run sentiment analysis using a graphical interface
 - Generate intuitive results for reporting and decision-making
 
-> 📂 To explore the tool, see the `Excel_Sentiment_Analyzer` folder.
+> 📂 To explore the tool, see the `xlsigui.py` folder.
 
 ---
 
