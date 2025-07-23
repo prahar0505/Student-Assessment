@@ -1,0 +1,169 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+
+```{r}
+# Install required packages
+#install.packages("tm") # for text mining
+#install.packages("SnowballC") # for text stemming
+#install.packages("wordcloud") # word-cloud generator
+#install.packages("RColorBrewer") # color palettes
+#install.packages("readxl") # for reading Excel files
+```
+```{r}
+# Load required packages
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+library("readxl")
+```
+
+
+
+```{r}
+# Install and load the required packages
+#install.packages(c("ggplot2", "tm"))
+library(ggplot2)
+library(tm)
+
+# Read and process the text data
+# Set the file path of the Excel file
+filePath <- "student_survey.xlsx"
+
+# Read the specific column from the Excel file
+columnData <- readxl::read_excel(filePath, sheet = "before_after", range = "M1:M1000", col_names = FALSE)
+corpus <- Corpus(VectorSource(columnData))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+corpus <- tm_map(corpus, stripWhitespace)
+
+# Create a term frequency table
+tdm <- TermDocumentMatrix(corpus)
+freq_table <- as.data.frame(as.matrix(tdm))
+colnames(freq_table) <- c("Frequency")
+freq_table$Word <- rownames(freq_table)
+freq_table <- freq_table[order(freq_table$Frequency, decreasing = TRUE), ]
+
+# Select the top 10 most repeating words
+top_10_words <- freq_table[1:10, ]
+top_10_words <- top_10_words[order(-top_10_words$Frequency), ]
+  
+
+# Create the bar graph
+ggplot(data = top_10_words, aes(x = reorder(Word, -Frequency), y = Frequency)) +
+  geom_bar(stat = "identity", fill = "darkblue") +
+  labs(x='',y = "Frequency") +
+  ggtitle("Top 10 Words from the Feedback provided for the Program") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+    panel.background = element_rect(fill = "white"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        axis.text = element_text(size = 14, color = "black"),
+        axis.title = element_text(size = 12, face = "bold"))+
+   coord_cartesian(ylim = c(0, max(top_10_words$Frequency) * 1.1)) +
+  scale_y_continuous(limits = c(0, max(top_10_words$Frequency) * 1.1), 
+                     breaks = seq(0, max(top_10_words$Frequency) * 1.1, 50))
+
+```
+```{r}
+wordcloud(words = top_10_words$Word, freq = top_10_words$Frequency,
+          scale = c(4, 0.3), max.words = 100, random.order = FALSE, 
+          colors = brewer.pal(8, "Dark2"))
+```
+
+
+```{r}
+# Create the word cloud
+set.seed(1234)
+wordcloud(words = wordData$word, freq = wordData$freq, min.freq = 1,
+          max.words = 200, random.order = FALSE, rot.per = 0.35,
+          colors = c("#FFC107", "#4CAF50", "#2196F3",
+          "#E91E63", "#FF5722", "#FF9800", "#9C27B0", "#607D8B",
+          "#795548", "#00BCD4", "#3F51B5", "#F44336", "#FFEB3B", "#9E9E9E"))
+```
+```{r}
+# Print the word count table
+cat("Word Count Table:\n")
+print(top_10_words)
+```
+
+##################################################################################################
+
+
+
+
+
+
+```{r}
+# Install and load the required packages
+#install.packages(c("ggplot2", "tm"))
+library(ggplot2)
+library(tm)
+
+# Read and process the text data
+# Set the file path of the Excel file
+filePath <- "student_survey.xlsx"
+
+# Read the specific column from the Excel file
+columnData2 <- readxl::read_excel(filePath, sheet = "before_after", range = "L1:L1000", col_names = FALSE)
+corpus <- Corpus(VectorSource(columnData2))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+corpus <- tm_map(corpus, stripWhitespace)
+
+# Create a term frequency table
+tdm <- TermDocumentMatrix(corpus)
+freq_table <- as.data.frame(as.matrix(tdm))
+colnames(freq_table) <- c("Frequency")
+freq_table$Word <- rownames(freq_table)
+freq_table <- freq_table[order(freq_table$Frequency, decreasing = TRUE), ]
+
+# Select the top 10 most repeating words
+top_10_words <- freq_table[1:10, ]
+top_10_words <- top_10_words[order(-top_10_words$Frequency), ]
+  
+
+
+ggplot(data = top_10_words, aes(x = reorder(Word, -Frequency), y = Frequency)) +
+  geom_bar(stat = "identity", fill = "#00FF00") +
+  labs(x = "", y = "Frequency") +
+  ggtitle("Top 10 Words from the Feedback provided for the Book") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        panel.background = element_rect(fill = "white"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        axis.text = element_text(size = 14, color = "black"),
+        axis.title = element_text(size = 12, face = "bold")) +
+ coord_cartesian(ylim = c(0, max(top_10_words$Frequency) * 1.1)) +
+  scale_y_continuous(limits = c(0, max(top_10_words$Frequency) * 1.1), 
+                     breaks = seq(0, max(top_10_words$Frequency) * 1.1, 50))
+
+
+```
+
+```{r}
+# Print the word count table
+cat("Word Count Table:\n")
+print(top_10_words)
+
+```
+
+```{r}
+wordcloud(words = top_10_words$Word, freq = top_10_words$Frequency,
+          scale = c(4, 0.3), max.words = 100, random.order = FALSE, 
+          colors = brewer.pal(8, "Dark2"))
+```
+```{r}
+set.seed(1234)
+wordcloud(words = freq_table$Word, freq = freq_table$Frequency, rot.per = 0.35, 
+          max.words = 300, random.order = FALSE, colors = c("#FF0000", "#00FF00", "#0000FF",
+          "#FFFF00", "#FF00FF", "#00FFFF", "#FF8000", "#008000", "#800080", "#808000",
+          "#008080", "#800000", "#C0C0C0", "#FFC0CB"))
+```
+
+
+
+
