@@ -75,10 +75,7 @@ The report outlines strategies to enhance future iterations of the program:
 - `Report.pdf`: Full project report with methodology, analysis, findings, and recommendations
 - `xlsigui.py/`: Folder containing the sentiment tool and user guide
 - `Sentiment analysis.pdf/`: For sentiment analysis
-- `wordcloud new.Rmd/`: Wordclods of positive, negative and neutral words throughout the survey
-
----
+- `wordcloud new.Rmd/`: Word clouds of positive, negative and neutral words throughout the survey
 
 
-> 🚀 *Empowering students with data-driven insights to unlock their full potential.*
 
